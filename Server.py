@@ -50,14 +50,15 @@ def chatwithAIGemini(question: str):
 
     **Câu hỏi**: {question}
 
-    Hãy chỉ tập trung vào việc giới thiệu sản phẩm hay ho nhất từ dữ liệu, không quan tâm đến thông tin không liên quan.
+    Hãy chỉ tập trung vào việc giới thiệu sản phẩm hay ho nhất từ dữ liệu, không quan tâm đến thông tin không liên quan. Nếu câu hỏi không rõ ràng về 1 sản phẩm thì có thể lấy 3-5 dữ liệu để so sánh
     Trả lời dưới dạng JSON như sau:
 
     ```json
     {{
     "ID": "ID của sản phẩm",
     "Note": "Lời khuyên và đánh giá chi tiết về sản phẩm",
-    "Image": "Hình ảnh sản phẩm"
+    "Image": "Hình ảnh sản phẩm",
+    "Price": "Giá sản phẩm",
     }}
     ```
     """
@@ -71,7 +72,7 @@ def chat(request: QueryRequest):
         response = chatwithAIGemini(request.question)
         cleanedResult = response.replace('```json', '').replace('```', '').strip()
         json_result = json.loads(cleanedResult)
-        return {json_result}
+        return json_result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
