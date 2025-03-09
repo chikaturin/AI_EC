@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 import google.generativeai as genai
@@ -20,6 +21,13 @@ embeddings = OllamaEmbeddings(model="nomic-embed-text")
 db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"], 
+)
 
 class QueryRequest(BaseModel):
     question: str
